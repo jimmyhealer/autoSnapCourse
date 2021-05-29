@@ -1,5 +1,5 @@
 # AutoSnapCourse
-## 自動搶課系統
+## 自動搶課程式 auto snap up corses
 ## 教學
 
 1. 首先您要有Windows。因為這是windows才能用，而且wsl也不行喔。
