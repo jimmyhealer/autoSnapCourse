@@ -13,7 +13,10 @@ def main():
   ch_options.add_experimental_option('excludeSwitches', ['enable-logging'])
   ch_options.add_argument('--headless')
 
+  # for linux
   #driver = webdriver.Chrome('./chromedriver', options = ch_options)
+
+  # for windows
   driver = webdriver.Chrome(options = ch_options, desired_capabilities=capa)
 
   driver.get('https://ais.ntou.edu.tw/Default.aspx')
@@ -29,20 +32,26 @@ def main():
   driver.switch_to.frame('mainFrame')
   print('begin')
   i = 0
+  print(time.ctime())
+  driver.find_element_by_id('Q_COSID').send_keys('B57021RP')
+  driver.find_element_by_id('QUERY_COSID_BTN').click()
+  time.sleep(1)
   while True:
     if i % 50 == 0: print(i)
-    driver.find_element_by_id('Q_COSID').send_keys('B57021RP')
-    driver.find_element_by_id('QUERY_COSID_BTN').click()
-    time.sleep(1)
     try:
       driver.find_element_by_id('DataGrid1_ctl02_edit').click()
       Alert = driver.switch_to.alert
       AlertText = Alert.text
       Alert.accept()
-      time.sleep(0.75)
-      Alert.accept()
+      time.sleep(1)
+      try:
+        Alert.accept()
+      except:
+        time.sleep(1)
+        Alert.accpet()
     except:
-      print(time.ctime(), AlertText)
+      print(time.ctime())
+      print(AlertText)
       if AlertText == '衝堂不可選!':
         driver.find_element_by_id('DataGrid3_ctl05_del').click()
         Alert = driver.switch_to.alert
