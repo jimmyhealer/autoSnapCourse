@@ -48,19 +48,20 @@ def main():
         Alert.accept()
       except:
         time.sleep(1)
-        Alert.accpet()
+        Alert.accept()
     except:
       print(time.ctime())
       print(AlertText)
       if AlertText == '衝堂不可選!':
         driver.find_element_by_id('DataGrid3_ctl05_del').click()
         Alert = driver.switch_to.alert
-        Alert.accpet()
+        Alert.accept()
         driver.find_element_by_id('DataGrid1_ctl02_edit').click()
         print('success')
+        break
       else:
         print('error')
-      break
+        Alert.accept()
     i += 1
   driver.save_screenshot('./ac.png')
   #input()
