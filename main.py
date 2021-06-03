@@ -55,15 +55,16 @@ def main():
       try:
         driver.find_element_by_id('DataGrid1_ctl02_edit').click()
         time.sleep(0.1)
+      except ElementClickInterceptedException:
+        continue
       except Exception as e:
         error_class = e.__class__.__name__
         detail = e.args[0]
         print('Error Code : 1, Error Class : {}'.format(error_class))
         print(detail)
         continue
-      try:
-        Alert = driver.switch_to.alert
-        AlertText = Alert.text
+      try
+        Alert, AlertText = getAlert(driver)
         errorCode = 2
         if AlertText == '本科目設有檢查人數下限。選本課程，在未達下限人數前時無法退選，確定加選?':
           Alert.accept()
