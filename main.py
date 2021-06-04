@@ -13,6 +13,8 @@ def getAlert(driver):
   except:
     return None, 'None'
 def main():
+  errorMessage = False
+  timesCount = 500
   f = open('./user.txt')
   username = f.readline().strip()
   password = f.readline().strip()
@@ -42,14 +44,21 @@ def main():
       driver.switch_to.default_content()
       driver.switch_to.frame('mainFrame')
     except:
-      print('error')
-      print(time.ctime())
+      if errorMessage:
+        print('Connected Error')
+        print(time.ctime())
       time.sleep(2)
       continue
     print('begin')
     print(time.ctime())
-    driver.find_element_by_id('Q_COSID').send_keys('B57021RP')
-    driver.find_element_by_id('QUERY_COSID_BTN').click()
+    try:
+      driver.find_element_by_id('Q_COSID').send_keys('B57021RP')
+      driver.find_element_by_id('QUERY_COSID_BTN').click()
+    except:
+      if errorMessage:
+        print('Search Cource Error')
+        print(time.ctime())
+      continue
     time.sleep(0.8)
     timeNow = time.time()
     timeOut = True
@@ -58,15 +67,16 @@ def main():
       if time.time() - timeNow > 30:
         print('Timeout, auto connect')
         timeOut = False
-      if i % 50 == 0: print(i)
+      if i % timesCount == 0: print(i)
       try:
         driver.find_element_by_id('DataGrid1_ctl02_edit').click()
         time.sleep(0.1)
       except Exception as e:
-        error_class = e.__class__.__name__
-        detail = e.args[0]
-        print('Error Code : 1, Error Class : {}'.format(error_class))
-        print(detail)
+        if errorMessage:
+          error_class = e.__class__.__name__
+          detail = e.args[0]
+          print('Error Code : 1, Error Class : {}'.format(error_class))
+          print(detail)
         continue
       try:
         Alert, AlertText = getAlert(driver)
@@ -92,12 +102,13 @@ def main():
           break
         timeNow = time.time()
       except Exception as e:
-        print(time.ctime())
-        print(AlertText)
-        error_class = e.__class__.__name__
-        detail = e.args[0]
-        print('Error Code : {}, Error Class : {}'.format(errorCode, error_class))
-        print(detail)
+        if errorMessage:
+          print(time.ctime())
+          print(AlertText)
+          error_class = e.__class__.__name__
+          detail = e.args[0]
+          print('Error Code : {}, Error Class : {}'.format(errorCode, error_class))
+          print(detail)
         continue
       i += 1
   driver.save_screenshot('./ac.png')
@@ -106,4 +117,5 @@ def main():
   print('quit')
 
 if __name__ == "__main__":
+  print(time.ctime())
   main()
