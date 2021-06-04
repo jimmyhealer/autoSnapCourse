@@ -27,27 +27,34 @@ def main():
 
   # for windows
   driver = webdriver.Chrome(options = ch_options, desired_capabilities=capa)
+  i = 0
   while True:
-    driver.get('https://ais.ntou.edu.tw/Default.aspx')
-    driver.implicitly_wait(4)
-    driver.find_element_by_name('M_PW').send_keys(password)
-    driver.find_element_by_id('M_PORTAL_LOGIN_ACNT').send_keys(username)
-    driver.find_element_by_id('LGOIN_BTN').click()
-    driver.switch_to.frame('menuFrame')
-    driver.find_element_by_id('Menu_TreeViewt1').click()
-    driver.find_element_by_id('Menu_TreeViewt30').click()
-    driver.find_element_by_id('Menu_TreeViewt40').click()
-    driver.switch_to.default_content()
-    driver.switch_to.frame('mainFrame')
+    try:
+      driver.get('https://ais.ntou.edu.tw/Default.aspx')
+      driver.implicitly_wait(4)
+      driver.find_element_by_name('M_PW').send_keys(password)
+      driver.find_element_by_id('M_PORTAL_LOGIN_ACNT').send_keys(username)
+      driver.find_element_by_id('LGOIN_BTN').click()
+      driver.switch_to.frame('menuFrame')
+      driver.find_element_by_id('Menu_TreeViewt1').click()
+      driver.find_element_by_id('Menu_TreeViewt30').click()
+      driver.find_element_by_id('Menu_TreeViewt40').click()
+      driver.switch_to.default_content()
+      driver.switch_to.frame('mainFrame')
+    except:
+      print('error')
+      print(time.ctime())
+      time.sleep(2)
+      continue
     print('begin')
-    i = 0
     print(time.ctime())
     driver.find_element_by_id('Q_COSID').send_keys('B57021RP')
     driver.find_element_by_id('QUERY_COSID_BTN').click()
-    time.sleep(1)
+    time.sleep(0.8)
     timeNow = time.time()
     timeOut = True
     while timeOut:
+      time.sleep(0.2)
       if time.time() - timeNow > 30:
         print('Timeout, auto connect')
         timeOut = False
@@ -55,15 +62,13 @@ def main():
       try:
         driver.find_element_by_id('DataGrid1_ctl02_edit').click()
         time.sleep(0.1)
-      except ElementClickInterceptedException:
-        continue
       except Exception as e:
         error_class = e.__class__.__name__
         detail = e.args[0]
         print('Error Code : 1, Error Class : {}'.format(error_class))
         print(detail)
         continue
-      try
+      try:
         Alert, AlertText = getAlert(driver)
         errorCode = 2
         if AlertText == '本科目設有檢查人數下限。選本課程，在未達下限人數前時無法退選，確定加選?':
