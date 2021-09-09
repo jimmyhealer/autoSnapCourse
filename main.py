@@ -5,9 +5,10 @@ import lib.settings as settings
 def main():  
   ulits.connect()
   gl.set('times', 0)
+  courseId = gl.get('courseId')
   while True:
     try:
-      if ulits.auto_snap(): break
+      if ulits.auto_snap(courseId): break
     except:
       continue
   gl.get('driver').close()
@@ -20,6 +21,7 @@ if __name__ == "__main__":
   gl._init()
   gl.set('username', f.readline().strip())
   gl.set('password', f.readline().strip())
+  gl.set('courseId', f.readline().strip())
   gl.set('errorMessage', False)
   gl.set('timesCount', 1)
   gl.set('driver' , settings._init())
