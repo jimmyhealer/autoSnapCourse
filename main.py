@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 import time
 import sys
 import traceback
@@ -22,7 +23,7 @@ def main():
   capa["pageLoadStrategy"] = "none"
   ch_options = Options()
   ch_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-  ch_options.add_argument('--headless')
+  # ch_options.add_argument('--headless')
 
   # for linux
   #driver = webdriver.Chrome('./chromedriver', options = ch_options)
@@ -34,13 +35,13 @@ def main():
     try:
       driver.get('https://ais.ntou.edu.tw/Default.aspx')
       driver.implicitly_wait(4)
-      driver.find_element_by_name('M_PW').send_keys(password)
-      driver.find_element_by_id('M_PORTAL_LOGIN_ACNT').send_keys(username)
-      driver.find_element_by_id('LGOIN_BTN').click()
+      driver.find_element(By.NAME, 'M_PW').send_keys(password)
+      driver.find_element(By.ID, 'M_PORTAL_LOGIN_ACNT').send_keys(username)
+      driver.find_element(By.ID, 'LGOIN_BTN').click()
       driver.switch_to.frame('menuFrame')
-      driver.find_element_by_id('Menu_TreeViewt1').click()
-      driver.find_element_by_id('Menu_TreeViewt30').click()
-      driver.find_element_by_id('Menu_TreeViewt40').click()
+      driver.find_element(By.ID, 'Menu_TreeViewt1').click()
+      driver.find_element(By.ID, 'Menu_TreeViewt31').click()
+      driver.find_element(By.ID, 'Menu_TreeViewt41').click()
       driver.switch_to.default_content()
       driver.switch_to.frame('mainFrame')
     except:
@@ -52,8 +53,8 @@ def main():
     print('begin')
     print(time.ctime())
     try:
-      driver.find_element_by_id('Q_COSID').send_keys('B57021RP')
-      driver.find_element_by_id('QUERY_COSID_BTN').click()
+      driver.find_element(By.ID, 'Q_COSID').send_keys('B57021EB')
+      driver.find_element(By.ID, 'QUERY_COSID_BTN').click()
     except:
       if errorMessage:
         print('Search Cource Error')
@@ -69,7 +70,7 @@ def main():
         timeOut = False
       if i % timesCount == 0: print(i)
       try:
-        driver.find_element_by_id('DataGrid1_ctl02_edit').click()
+        driver.find_element(By.ID, 'DataGrid1_ctl02_edit').click()
         time.sleep(0.1)
       except Exception as e:
         if errorMessage:
@@ -92,12 +93,12 @@ def main():
           Alert, AlertText = getAlert(driver)
           errorCode = 4
         if AlertText == '衝堂不可選！':
-          driver.find_element_by_id('DataGrid3_ctl05_del').click()
+          driver.find_element(By.ID, 'DataGrid3_ctl05_del').click()
           time.sleep(0.5)
           Alert = driver.switch_to.alert
           Alert.accept()
           time.sleep(0.5)
-          driver.find_element_by_id('DataGrid1_ctl02_edit').click()
+          driver.find_element(By.ID, 'DataGrid1_ctl02_edit').click()
           print('success')
           break
         timeNow = time.time()
